@@ -9,14 +9,13 @@ use App\Http\Controllers\MedecinController;
 use App\Http\Controllers\ConsultationController; 
 use App\Http\Controllers\PharmacieController;
 use App\Http\Controllers\CaisseController;
+use App\Http\Controllers\DashboardController;
 
 // ------------------------------------------
 //  TABLEAU DE BORD (Racine)
 // ------------------------------------------
-Route::get('/', function () {
-    return redirect()->route('patients.index'); // Rediriger l'accueil vers la liste des patients
-});
-
+// Lier la racine au nouveau DashboardController
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard'); 
 // ------------------------------------------
 //  CRUD SALLE
 // ------------------------------------------

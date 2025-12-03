@@ -145,12 +145,59 @@
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* --- GRAPHIC STYLES --- */
+        .chart-container {
+            height: 250px;
+            padding: 15px;
+            background: #fdfdfd;
+            border-top: 5px solid #eee;
+            border-radius: 6px;
+            display: flex;
+            align-items: flex-end; /* Pour les barres */
+            justify-content: space-around;
+        }
+
+        .chart-bar {
+            width: 40px;
+            background-color: var(--primary-color);
+            margin: 0 10px;
+            position: relative;
+            border-radius: 4px 4px 0 0;
+            transition: height 0.8s ease-out; /* Effet d'animation à l'affichage */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-bar span {
+            position: absolute;
+            top: -25px;
+            font-size: 0.9em;
+            font-weight: bold;
+            width: 100%;
+            text-align: center;
+            color: var(--text-dark);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            margin-right: 8px;
+        }
+
     </style>
 </head>
 <body>
     
     <div class="sidebar">
-        <h1>Hospitel-Pro</h1>
+        <h1>Hopital - Pro</h1>
         <nav>
             <p style="color: #bbb; padding: 0 20px; margin-top: 20px; font-size: 0.9em;">NAVIGATION PRINCIPALE</p>
             <a href="{{ url('/') }}">Tableau de Bord</a>
