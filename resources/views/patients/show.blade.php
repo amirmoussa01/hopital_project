@@ -3,7 +3,7 @@
 @section('title', 'Fiche Patient: ' . $patient->nom . ' ' . $patient->prenom)
 
 @section('content')
-    <h2>🧑‍⚕️ Fiche Patient: {{ $patient->prenom }} {{ $patient->nom }}</h2>
+    <h2>Fiche Patient: {{ $patient->prenom }} {{ $patient->nom }}</h2>
     
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 30px;">
         <div style="background: #f9f9f9; padding: 20px; border-radius: 6px;">
@@ -20,14 +20,14 @@
             
             <a href="{{ route('consultation.create', $patient->id_patient) }}" 
                style="display: inline-block; background-color: #ffc107; color: #333; padding: 10px 15px; text-decoration: none; border-radius: 4px; margin-top: 15px;">
-                ▶️ Démarrer une Nouvelle Consultation
+                Démarrer une Nouvelle Consultation
             </a>
         </div>
     </div>
     
     <hr>
     
-    <h3>📘 Historique Médical Complet ({{ $historique_dossiers->count() }} Dossiers)</h3>
+    <h3>Historique Médical Complet ({{ $historique_dossiers->count() }} Dossiers)</h3>
     
     @forelse ($historique_dossiers as $dossier)
         <div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 4px;">

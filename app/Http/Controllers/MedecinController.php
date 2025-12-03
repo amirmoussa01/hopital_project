@@ -2,16 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Patient;
 use App\Models\Medecin;
+use App\Models\Patient;
 use App\Models\Consultation;
 use App\Models\Dossier;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB; // NÉCESSAIRE pour la transaction
+use Illuminate\Support\Facades\DB;
 
 class MedecinController extends Controller
 {
-    // --- NOUVEAU : Création de Médecins ---
+    /**
+     * Affiche la liste de tous les médecins (Panel général).
+     */
+    public function index()
+    {
+        // Récupérer les médecins avec le compte de leurs dossiers (pour la suppression)
+        $medecins = Medecin::withCount('dossiers')->get();
+        return view('medecins.index', compact('medecins'));
+    }
+
+    /**
+     * Affiche le formulaire pour ajouter un nouveau médecin.
+     */
     public function create()
     {
         return view('medecins.create');
@@ -31,7 +43,50 @@ class MedecinController extends Controller
         
         Medecin::create($validated);
         
-        return redirect()->route('medecins.create')->with('success', 'Le médecin ' . $validated['nom'] . ' ' . $validated['prenom'] . ' a été ajouté avec succès.');
+        return redirect()->route('medecins.index')->with('success', 'Le médecin ' . $validated['nom'] . ' a été ajouté avec succès.');
+    }
+    
+    /**
+     * Affiche le formulaire de modification d'un médecin.
+     */
+    public function edit(Medecin $medecin)
+    {
+        return view('medecins.edit', compact('medecin'));
+    }
+
+    /**
+     * Met à jour le médecin spécifié.
+     */
+    public function update(Request $request, Medecin $medecin)
+    {
+        $validated = $request->validate([
+            'nom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            // L'email doit être unique sauf pour le médecin actuel
+            'email' => 'required|email|unique:medecins,email,' . $medecin->id_medecin . ',id_medecin', 
+            'specialite' => 'nullable|string|max:255',
+        ]);
+
+        $medecin->update($validated);
+
+        return redirect()->route('medecins.index')
+                         ->with('success', 'Dr. ' . $medecin->nom . ' mis à jour avec succès.');
+    }
+
+    /**
+     * Supprime le médecin spécifié.
+     */
+    public function destroy(Medecin $medecin)
+    {
+        // Vérification pour s'assurer qu'aucun dossier n'est lié à ce médecin
+        if ($medecin->dossiers()->count() > 0) {
+             return back()->withErrors('Impossible de supprimer Dr. ' . $medecin->nom . ' : il a déjà des dossiers et consultations enregistrés. (Règle ON DELETE RESTRICT)');
+        }
+        
+        $medecin->delete();
+
+        return redirect()->route('medecins.index')
+                         ->with('success', 'Dr. ' . $medecin->nom . ' a été supprimé.');
     }
 
     public function createConsultation(Patient $patient)
